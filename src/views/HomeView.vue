@@ -206,7 +206,7 @@ export default {
             <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
             <select class="form-select" data-cy="modal-add-priority-dropdown" aria-label="Default select example" v-model="priority">
-              <option value="very-high" selected>Very High</option>
+              <option value="very-high">Very High</option>
               <option value="high">High</option>
               <option value="normal">Medium</option>
               <option value="low">Low</option>
