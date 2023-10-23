@@ -21,6 +21,7 @@ export default {
       isEditing: false,
       idTodo: 0,
       allTodo :[],
+      isDisabled:true
      
     }
   },
@@ -88,6 +89,14 @@ export default {
       this.title = "";
       this.priority = "very-high";
     },
+    checkInput() {
+      console.log("Input berubah: " + this.title);
+      if (this.title !== "") {
+        this.isDisabled = false
+      }else{
+        this.isDisabled =true
+      }
+    }
   },
   computed: {
     ...mapState(useActivityStore, ['activities','showComponent','activity']),
@@ -181,7 +190,7 @@ export default {
 
   <!-- modal -->
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -194,9 +203,9 @@ export default {
           </div>
           <div class="jss185">
             <div data-cy="modal-add-name-title" class="jss186">NAMA LIST ITEM</div>
-            <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title">
+            <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
-            <select class="form-select" aria-label="Default select example" v-model="priority">
+            <select class="form-select" data-cy="modal-add-priority-dropdown" aria-label="Default select example" v-model="priority">
               <option value="very-high" selected>Very High</option>
               <option value="high">High</option>
               <option value="normal">Medium</option>
@@ -206,7 +215,7 @@ export default {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" data-cy="modal-add-save-button" :disabled="isDisabled">Save</button>
         </div>
       </form>
     </div>
