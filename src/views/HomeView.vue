@@ -20,7 +20,8 @@ export default {
       isUpdateTitle:false,
       isEditing: false,
       idTodo: 0,
-      allTodo :[]
+      allTodo :[],
+     
     }
   },
   methods: {
@@ -28,6 +29,7 @@ export default {
     addActivityHandler(){
       this.addActivity()
     },
+  
     changePageHandler(){
       this.changePage ()
     },
@@ -212,6 +214,7 @@ export default {
 </div>
 
 
+
 </template>
 
 <style>
@@ -222,6 +225,78 @@ export default {
 .input-h1-size {
   font-size: 2rem; 
   font-weight: bold;
+}
+
+.jss27 {
+    margin-bottom: 50px;
+}
+
+.jss63 {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+}
+
+.jss76 {
+    display: flex;
+    padding: 20px 30px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    border-radius: 12px;
+}
+
+
+.jss28 {
+    color: #111111;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 500;
+    line-height: 150%;
+}
+
+.jss25 {
+    display: flex;
+    margin-top: 46px;
+    justify-content: center;
+}
+
+.jss29 {
+    font-weight: 700;
+}
+.jss5 {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+}
+.jss24 {
+    width: 490px;
+    display: flex;
+    padding: 50px 58px 43px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+.jss26 {
+    margin: 0 10px;
+}
+.jss13 {
+    color: #FFFFFF;
+    background: #ED4C5C;
+}
+.jss11 {
+    border: none;
+    height: 54px;
+    margin: 0px 6px;
+    font-size: 18px;
+    min-width: 150px;
+    font-weight: 600;
+    border-radius: 45px;
+    text-transform: capitalize;
 }
 
 .jss216 {

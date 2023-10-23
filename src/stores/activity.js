@@ -9,6 +9,8 @@ export const useActivityStore = defineStore('activity', {
     todos: [],
     activity: {},
     showComponent: true,
+    isDeleteActivity: true,
+    isConfirmDelete: false,
     title: '',
     priority: 'very-high'
   }),
@@ -136,24 +138,17 @@ export const useActivityStore = defineStore('activity', {
     },
     async deleteActivity(id) {
       try {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            await axios({
-              method: 'delete',
-              url: this.url + `/activity-groups/${id}`
-            })
-            this.getActivities()
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-          }
+        console.log(this.isConfirmDelete)
+        await axios({
+          method: 'delete',
+          url: this.url + `/activity-groups/${id}`
         })
+        this.getActivities()
+        this.isDeleteActivity = !this.isDeleteActivity
+        this.isConfirmDelete = true
+        setTimeout(() => {
+          this.isConfirmDelete = false
+        }, 2000)
       } catch (error) {
         console.log(error)
       }
