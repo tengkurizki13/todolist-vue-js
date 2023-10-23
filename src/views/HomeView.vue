@@ -112,7 +112,7 @@ export default {
       <div class="jss260">
         <ActivityCard v-for="activity in activities" :key="activity.id" :activity="activity" />
       </div>
-      <img v-if="activities.length === 0" data-cy="activity-empty-state" src="	https://todo-devcode.web.app/static/media/activity-empty-state.5f1bc10d.png
+      <img v-if="activities.length === 0" data-cy="activity-empty-state" src="https://todo-devcode.web.app/static/media/activity-empty-state.5f1bc10d.png
 " alt="add-activity" class="jss216" @click="addActivityHandler">
     </div>
     </section>
