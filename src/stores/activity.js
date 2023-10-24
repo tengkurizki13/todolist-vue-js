@@ -9,7 +9,7 @@ export const useActivityStore = defineStore('activity', {
     todos: [],
     activity: {},
     showComponent: true,
-    isDeleteActivity: true,
+    isDeleteData: true,
     isConfirmDelete: false,
     title: '',
     priority: 'very-high'
@@ -144,7 +144,7 @@ export const useActivityStore = defineStore('activity', {
           url: this.url + `/activity-groups/${id}`
         })
         this.getActivities()
-        this.isDeleteActivity = !this.isDeleteActivity
+        this.isDeleteData = !this.isDeleteData
         this.isConfirmDelete = true
         setTimeout(() => {
           this.isConfirmDelete = false
@@ -155,24 +155,16 @@ export const useActivityStore = defineStore('activity', {
     },
     async deleteTodo(id, activity_group_id) {
       try {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            await axios({
-              method: 'delete',
-              url: this.url + `/todo-items/${id}`
-            })
-            this.getTodos(activity_group_id)
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
-          }
+        await axios({
+          method: 'delete',
+          url: this.url + `/todo-items/${id}`
         })
+        this.getTodos(activity_group_id)
+        this.isDeleteData = !this.isDeleteData
+        this.isConfirmDelete = true
+        setTimeout(() => {
+          this.isConfirmDelete = false
+        }, 2000)
       } catch (error) {
         console.log(error)
       }

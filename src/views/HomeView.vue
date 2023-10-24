@@ -1,5 +1,5 @@
 <script>
-import ActivityCard from '../components/ActivityCard.vue'
+// import ActivityCard from '../components/ActivityCard.vue'
 import TodoCard from '../components/TodoCard.vue'
 import Navbar from '../components/Navbar.vue'
 import { mapActions,mapState,mapWritableState } from 'pinia'
@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 export default {
   components: {
-    ActivityCard,
+    // ActivityCard,
     TodoCard,
     Navbar
   },
@@ -19,20 +19,47 @@ export default {
       isSort: false,
       isUpdateTitle:false,
       isEditing: false,
+      isDeletingTodo: false,
       idTodo: 0,
       allTodo :[],
-      isDisabled:true
+      isDisabled:true,
+      idActivity :0,
      
     }
   },
   methods: {
-    ...mapActions(useActivityStore, ['getActivities','addActivity','changePage','addTodo','updateActivity','updateTodo']),
+    ...mapActions(useActivityStore, ['getActivities','addActivity','changePage','addTodo','updateActivity','updateTodo','getActivityDetail','getTodos','deleteActivity','deleteTodo','updateTodoActive']),
     addActivityHandler(){
       this.addActivity()
     },
   
     changePageHandler(){
       this.changePage ()
+    },
+    showDeleteActivityHandler(id){
+      this.idActivity = id
+      this.isDeleteData = !this.isDeleteData
+      this.isDeletingTodo = false
+    },
+    showDeleteTodoHandler(id,activity_group_id){
+      this.idTodo = id
+      this.idActivity = activity_group_id
+      this.isDeleteData = !this.isDeleteData
+      this.isDeletingTodo = true
+    },
+    cancelDeleteHandler(){
+      this.isDeleteData = !this.isDeleteData
+    },
+    deleteHandler(id){
+      if (this.isDeletingTodo) {
+        this.deleteTodo(this.idTodo,this.idActivity)
+      }else{
+        this.deleteActivity(this.idActivity)
+      }
+    },
+    getActivityDetailHandler(id){
+      this.getActivityDetail (id)
+      this.getTodos (id)
     },
     submitHandler(){
       if (this.isEditing) {
@@ -49,6 +76,13 @@ export default {
     },
     showElementSort(){
       this.isSort = !this.isSort
+    },
+    openEditHandler(id,title,priority){
+      this.openEditModal(id,title,priority);
+    },
+    handleCheckboxChange(idTodo,activity_group_id) {
+      const isChecked = event.target.checked; 
+      this.updateTodoActive(idTodo,activity_group_id,isChecked)
     },
     handleSort(keySort) {
       if (this.allTodo.length === 0) {
@@ -100,8 +134,13 @@ export default {
   },
   computed: {
     ...mapState(useActivityStore, ['activities','showComponent','activity']),
-    ...mapWritableState(useActivityStore, ['title','priority','todos']),
-    
+    ...mapWritableState(useActivityStore, ['title','priority','todos','isDeleteData','isConfirmDelete','isDeleteTodo']),
+    confirmDate() {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(this.activity.created_at);
+
+      return date.toLocaleDateString('id-ID', options);
+    },
   },
   created(){
     this.getActivities()
@@ -121,7 +160,12 @@ export default {
         </button>
       </div>
       <div class="jss260">
-        <ActivityCard v-for="activity in activities" :key="activity.id" :activity="activity" />
+        <div data-cy="activity-item" class="jss262 jss261" v-for="activity in activities" :key="activity.id" :activity="activity">
+            <div data-cy="activity-item-title" class="jss263"  @click="getActivityDetailHandler(activity.id)">{{ activity.title }}</div>
+            <div class="jss265"><div data-cy="activity-item-date" class="jss264">{{ confirmDate }}</div>
+            <svg @click="showDeleteActivityHandler(activity.id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="activity-item-delete-button"><path d="M4 7H20" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 11V17" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 11V17" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 7L6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19L19 7" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+        </div>
       </div>
       <img v-if="activities.length === 0" data-cy="activity-empty-state" src="https://todo-devcode.web.app/static/media/activity-empty-state.5f1bc10d.png
 " alt="add-activity" class="jss216" @click="addActivityHandler">
@@ -181,7 +225,21 @@ export default {
           </div>
       
           <!-- item -->
-          <TodoCard v-for="todo in todos" :key="todo.id" :todo="todo" />
+          <!-- <TodoCard v-for="todo in todos" :key="todo.id" :todo="todo" /> -->
+          <div data-cy="todo-item" class="jss27" v-for="todo in todos" :key="todo.id" >
+        <div class="jss28">
+            <input type="checkbox" data-cy="todo-item-checkbox" @change="handleCheckboxChange(todo.id,todo.activity_group_id)" v-model="todo.is_active" :true-value="1" :false-value="0"><span class="jss32"></span>
+          <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(237, 76, 92);" v-if="todo.priority === 'very-high'"></div>
+          <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(255, 107, 38);" v-if="todo.priority === 'high'"></div>
+          <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(33, 109, 20);" v-if="todo.priority === 'normal'"></div>
+          <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(40, 109, 161);" v-if="todo.priority === 'low'"></div>
+          <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(161, 44, 147);" v-if="todo.priority === 'very-low'"></div>
+            <div data-cy="todo-item-title" class="jss30">{{ todo.title }}</div>
+            <svg @click="openEditHandler(todo.id,todo.title,todo.priority)" data-bs-toggle="modal" data-bs-target="#exampleModal" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-item-edit-button"><path d="M4 19.9998H8L18.5 9.49981C19.0304 8.96938 19.3284 8.24996 19.3284 7.49981C19.3284 6.74967 19.0304 6.03025 18.5 5.49981C17.9696 4.96938 17.2501 4.67139 16.5 4.67139C15.7499 4.67139 15.0304 4.96938 14.5 5.49981L4 15.9998V19.9998Z" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 6.49982L17.5 10.4998" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+           </div>
+
+          <svg @click="showDeleteTodoHandler(todo.id,todo.activity_group_id)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-item-delete-button"><path d="M4 7H20" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 11V17" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 11V17" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 7L6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19L19 7" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
       <!-- img -->
       <img v-if="todos.length === 0"  data-cy="todo-empty-state" src="https://todo-devcode.web.app/static/media/todo-empty-state.a0b4b794.png" alt="add-todo" class="jss22" >
     </div>
@@ -222,6 +280,22 @@ export default {
   </div>
 </div>
 
+
+
+<!-- modal delete -->
+
+<div data-cy="modal-delete" class="jss24 jss5" v-if="!isDeleteData">
+  <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="modal-delete-icon" class="jss27"><path d="M42 52.5V52.535M42 31.5V38.5V31.5Z" stroke="#ED4C5C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.5002 66.5012H66.5002C67.6423 66.4932 68.765 66.2059 69.7705 65.6643C70.7761 65.1227 71.6338 64.3433 72.2689 63.3941C72.904 62.4449 73.2972 61.3546 73.4142 60.2186C73.5312 59.0825 73.3685 57.935 72.9402 56.8762L48.0902 14.0012C47.4848 12.9071 46.5975 11.9952 45.5203 11.3601C44.4432 10.725 43.2156 10.3901 41.9652 10.3901C40.7148 10.3901 39.4872 10.725 38.41 11.3601C37.3329 11.9952 36.4455 12.9071 35.8402 14.0012L10.9902 56.8762C10.57 57.9108 10.4033 59.0308 10.5042 60.1428C10.6051 61.2549 10.9705 62.3266 11.57 63.2687C12.1694 64.2107 12.9856 64.9956 13.9502 65.558C14.9149 66.1203 16.0001 66.4438 17.1152 66.5012" stroke="#ED4C5C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  <div data-cy="modal-delete-title" class="jss28">Apakah anda yakin menghapus activity</div>
+  <div class="jss28 jss29">"New Activity"?</div><div class="jss25">
+    <button class="jss11 jss26" data-cy="modal-delete-cancel-button" @click="cancelDeleteHandler">Batal</button><button class="jss11 jss13 jss26" data-cy="modal-delete-confirm-button" @click="deleteHandler">Hapus</button>
+  </div>
+</div>
+
+<!-- confirm delete -->
+
+<div class="jss63" style="max-width: 490px;" v-if="isConfirmDelete">
+<div data-cy="modal-information" class="jss76"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="modal-information-icon"><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#00A790" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 8V12" stroke="#00A790" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 16H12.01" stroke="#00A790" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><div data-cy="modal-information-title" class="jss77">Activity berhasil dihapus</div></div></div>
 
 
 </template>
