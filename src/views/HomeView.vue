@@ -72,9 +72,14 @@ export default {
     handleInputChange() {
       this.updateTitle(this.activity.id, this.activity.title);
     },
-    changeElement(){
-      console.log("masuk");
-      this.isUpdateTitle = !this.isUpdateTitle
+    changeElement(action){
+      if (action == 'input'){
+        this.isUpdateTitle =true
+      }else if (action == 'svg'){
+        this.isUpdateTitle = !this.isUpdateTitle
+      }else{
+        this.isUpdateTitle =false
+      }
     },
     showElementSort(){
       this.isSort = !this.isSort
@@ -141,7 +146,7 @@ export default {
   },
   computed: {
     ...mapState(useActivityStore, ['activities','showComponent','activity']),
-    ...mapWritableState(useActivityStore, ['title','priority','todos','isDeleteData','isConfirmDelete','isDeleteTodo','updateTitle']),
+    ...mapWritableState(useActivityStore, ['title','priority','todos','isDeleteData','isConfirmDelete','isDeleteTodo']),
     confirmDate() {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       const date = new Date(this.activity.created_at);
@@ -156,7 +161,7 @@ export default {
 </script>
 
 <template>
-  <Navbar/>
+  <Navbar @click="changeElement"/>
   <div class="container">
     <section :class="{ 'hidden': !showComponent }">
     <div class="jss255">
@@ -180,18 +185,18 @@ export default {
     </section>
 
     <!-- =============================== hal2====================== -->
-    <section :class="{ 'hidden': showComponent }">
+    <section :class="{ 'hidden': showComponent }" @click="changeElementOutInput">
       <div class="jss18">
-        <div class="jss25 jss26 jss20" >
+        <div class="jss25 jss26 jss20">
           <div class="jss25">
             <svg width="32" @click="changePageHandler" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-back-button" class="jss23"><path d="M6.66675 16L14.6667 24" stroke="#111111" stroke-width="5" stroke-linecap="square"></path><path d="M6.66675 16L14.6667 8" stroke="#111111" stroke-width="5" stroke-linecap="square"></path></svg>
-            <h1 class="jss10" data-cy="todo-title" v-if="!isUpdateTitle" @click="changeElement">{{ activity.title }}</h1>
-            <input type="text" class="form-control border-0  bg-transparent input-h1-size" v-model="activity.title" @change="handleInputChange" v-if="isUpdateTitle"/>
-            <svg @click="changeElement" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-title-edit-button" class="jss23"><path d="M4 19.9998H8L18.5 9.49981C19.0304 8.96938 19.3284 8.24996 19.3284 7.49981C19.3284 6.74967 19.0304 6.03025 18.5 5.49981C17.9696 4.96938 17.2501 4.67139 16.5 4.67139C15.7499 4.67139 15.0304 4.96938 14.5 5.49981L4 15.9998V19.9998Z" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 6.49982L17.5 10.4998" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <h1 class="jss10" data-cy="todo-title" v-if="!isUpdateTitle" @click="changeElement('input')">{{ activity.title }}</h1>
+            <input type="text" class="form-control border-0  bg-transparent input-h1-size" v-model="activity.title" @change="handleInputChange" v-if="isUpdateTitle" />
+            <svg @click="changeElement('svg')" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-title-edit-button" class="jss23"><path d="M4 19.9998H8L18.5 9.49981C19.0304 8.96938 19.3284 8.24996 19.3284 7.49981C19.3284 6.74967 19.0304 6.03025 18.5 5.49981C17.9696 4.96938 17.2501 4.67139 16.5 4.67139C15.7499 4.67139 15.0304 4.96938 14.5 5.49981L4 15.9998V19.9998Z" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 6.49982L17.5 10.4998" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
 
           <!-- sort -->
-          <div role="tooltip" id="simple-popper" style="position: absolute; top: 200px; left: 0px; transform: translate3d(1133px, 5px, 0px); will-change: transform;" x-placement="top" v-if="isSort">
+          <div role="tooltip" id="simple-popper" style="position: absolute; top: 250px; left: 0px; transform: translate3d(1133px, 5px, 0px); will-change: transform;" x-placement="top" v-if="isSort">
             <div data-cy="sort-parent" class="jss125">
               <div data-cy="sort-selection" class="jss126" @click="handleSort('terbaru')">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.5H9.75" stroke="#16ABF8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 9H8.25" stroke="#16ABF8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 13.5H8.25" stroke="#16ABF8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.25 11.25L13.5 13.5L15.75 11.25" stroke="#16ABF8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 4.5V13.5" stroke="#16ABF8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -233,7 +238,7 @@ export default {
       
           <!-- item -->
           <!-- <TodoCard v-for="todo in todos" :key="todo.id" :todo="todo" /> -->
-          <div data-cy="todo-item" class="jss27" v-for="todo in todos" :key="todo.id" >
+          <div data-cy="todo-item" class="jss27" v-for="todo in todos" :key="todo.id">
         <div class="jss28">
             <input type="checkbox" data-cy="todo-item-checkbox" @change="handleCheckboxChange(todo.id,todo.activity_group_id)" v-model="todo.is_active" :true-value="1" :false-value="0"><span class="jss32"></span>
           <div data-cy="todo-item-priority-indicator" class="jss29" style="background: rgb(237, 76, 92);" v-if="todo.priority === 'very-high'"></div>
@@ -272,13 +277,13 @@ export default {
             <div data-cy="modal-add-name-title" class="jss186">NAMA LIST ITEM</div>
             <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
-            <select class="form-select" data-cy="modal-add-priority-dropdown">
-              <option value="very-high" data-cy="modal-add-priority-item-very-high">Very High</option>
-              <option value="high" data-cy="modal-add-priority-item-high">High</option>
-              <option value="normal" data-cy="modal-add-priority-item-normal">Medium</option>
-              <option value="low" data-cy="modal-add-priority-item-low">Low</option>
-              <option value="very-low" data-cy="modal-add-priority-item-very-low">Very Low</option>
-            </select>
+            <select class="form-select" data-cy="modal-add-priority-dropdown" v-model="priority">
+                <option value="very-high" data-cy="modal-add-priority-item-very-high">Very High</option>
+                <option value="high" data-cy="modal-add-priority-item-high">High</option>
+                <option value="normal" data-cy="modal-add-priority-item-normal">Medium</option>
+                <option value="low" data-cy="modal-add-priority-item-low">Low</option>
+                <option value="very-low" data-cy="modal-add-priority-item-very-low">Very Low</option>
+              </select>
           </div>
         </div>
         <div class="modal-footer">
