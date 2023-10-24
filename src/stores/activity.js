@@ -61,7 +61,7 @@ export const useActivityStore = defineStore('activity', {
         console.log(error)
       }
     },
-    async updateActivity(id, data) {
+    async updateTitle(id, data) {
       try {
         await axios({
           method: 'patch',

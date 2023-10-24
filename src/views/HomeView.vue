@@ -22,13 +22,13 @@ export default {
       isDeletingTodo: false,
       idTodo: 0,
       allTodo :[],
-      isDisabled:true,
+      empty:true,
       idActivity :0,
      
     }
   },
   methods: {
-    ...mapActions(useActivityStore, ['getActivities','addActivity','changePage','addTodo','updateActivity','updateTodo','getActivityDetail','getTodos','deleteActivity','deleteTodo','updateTodoActive']),
+    ...mapActions(useActivityStore, ['getActivities','addActivity','changePage','addTodo','updateTitle','updateTodo','getActivityDetail','getTodos','deleteActivity','deleteTodo','updateTodoActive']),
     addActivityHandler(){
       this.addActivity()
     },
@@ -126,9 +126,9 @@ export default {
     checkInput() {
       console.log("Input berubah: " + this.title);
       if (this.title !== "") {
-        this.isDisabled = false
+        this.empty = false
       }else{
-        this.isDisabled =true
+        this.empty =true
       }
     }
   },
@@ -246,9 +246,11 @@ export default {
     </section>
   </div>
 
-  <!-- modal -->
 
-  <div class="modal fade" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+ <!-- modal -->
+
+ <div class="modal fade jss24 jss5" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -264,16 +266,16 @@ export default {
             <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
             <select class="form-select" data-cy="modal-add-priority-dropdown" aria-label="Default select example" v-model="priority">
-              <option value="very-high">Very High</option>
-              <option value="high">High</option>
-              <option value="normal">Medium</option>
-              <option value="low">Low</option>
-              <option value="very-low">Very Low</option>
+              <option value="very-high" data-cy="modal-add-priority-item" :selected="priority === 'very-high'">Very High</option>
+              <option value="high" data-cy="modal-add-priority-item" :selected="priority === 'high'">High</option>
+              <option value="normal" data-cy="modal-add-priority-item" :selected="priority === 'normal'">Medium</option>
+              <option value="low" data-cy="modal-add-priority-item" :selected="priority === 'low'">Low</option>
+              <option value="very-low" data-cy="modal-add-priority-item" :selected="priority === 'very-low'">Very Low</option>
             </select>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" data-cy="modal-add-save-button" :disabled="isDisabled">Save</button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" data-cy="modal-add-save-button" :disabled="empty">Save</button>
         </div>
       </form>
     </div>
