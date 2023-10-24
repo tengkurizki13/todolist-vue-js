@@ -126,6 +126,7 @@ export default {
     },
     openAddModal() {
       this.isEditing = false;
+      this.empty = true
       this.title = "";
       this.priority = "very-high";
     },
