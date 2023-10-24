@@ -70,7 +70,7 @@ export default {
       }
     },
     handleInputChange() {
-      this.updateActivity(this.activity.id, this.activity.title);
+      this.updateTitle(this.activity.id, this.activity.title);
     },
     changeElement(){
       this.isUpdateTitle = !this.isUpdateTitle
@@ -140,7 +140,7 @@ export default {
   },
   computed: {
     ...mapState(useActivityStore, ['activities','showComponent','activity']),
-    ...mapWritableState(useActivityStore, ['title','priority','todos','isDeleteData','isConfirmDelete','isDeleteTodo']),
+    ...mapWritableState(useActivityStore, ['title','priority','todos','isDeleteData','isConfirmDelete','isDeleteTodo','updateTitle']),
     confirmDate() {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       const date = new Date(this.activity.created_at);
@@ -272,12 +272,12 @@ export default {
             <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
             <select class="form-select" data-cy="modal-add-priority-dropdown" v-model="priority">
-                  <option value="very-high" data-cy="modal-add-priority-item">Very High</option>
-                  <option value="high" data-cy="modal-add-priority-item">High</option>
-                  <option value="normal" data-cy="modal-add-priority-item">Medium</option>
-                  <option value="low" data-cy="modal-add-priority-item">Low</option>
-                  <option value="very-low" data-cy="modal-add-priority-item">Very Low</option>
-                </select>
+                <option value="very-high" data-cy="modal-add-priority-item-very-high">Very High</option>
+                <option value="high" data-cy="modal-add-priority-item-high">High</option>
+                <option value="normal" data-cy="modal-add-priority-item-normal">Medium</option>
+                <option value="low" data-cy="modal-add-priority-item-low">Low</option>
+                <option value="very-low" data-cy="modal-add-priority-item-very-low">Very Low</option>
+              </select>
           </div>
         </div>
         <div class="modal-footer">
