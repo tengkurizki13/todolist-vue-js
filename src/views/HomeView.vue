@@ -48,6 +48,7 @@ export default {
       this.isDeletingTodo = true
     },
     cancelDeleteHandler(){
+      console.log("masuk");
       this.isDeleteData = !this.isDeleteData
     },
     deleteHandler(id){
@@ -92,21 +93,26 @@ export default {
       switch (keySort) {
         case "terbaru":
           this.todos = [...this.allTodo]; 
+          this.isSort = !this.isSort
           break;
         case "terlama":
           this.todos = [...this.allTodo]; // Menduplikat isi this.allTodo ke this.todos
           this.todos = this.todos.reverse();
+           this.isSort = !this.isSort
           break;
         case "A-Z":
           this.todos = [...this.allTodo]; // Menduplikat isi this.allTodo ke this.todos
           this.todos = _.orderBy(this.todos, ['title'], ['asc']);
+           this.isSort = !this.isSort
           break;
         case "Z-A":
           this.todos = [...this.allTodo]; // Menduplikat isi this.allTodo ke this.todos
           this.todos = _.orderBy(this.todos, ['title'], ['desc']);
+           this.isSort = !this.isSort
           break;
         case "belum-selesai":
           this.todos = [...this.allTodo]; // Menduplikat isi this.allTodo ke this.todos
+          this.isSort = !this.isSort
           break;
         default:
           break;
@@ -129,7 +135,7 @@ export default {
       }else{
         this.empty = false
       }
-    }
+    },
   },
   computed: {
     ...mapState(useActivityStore, ['activities','showComponent','activity']),
@@ -250,7 +256,6 @@ export default {
 
  <!-- modal -->
  <div class="modal fade" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="jss24 jss5">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -281,9 +286,8 @@ export default {
     </div>
   </div>
 </div>
-</div>
 
-
+<div aria-hidden="true" style="z-index: 0; position: fixed; inset: 0px; background-color: rgba(0, 0, 0, 0.5); -webkit-tap-highlight-color: transparent;" v-if="!isDeleteData" @click="cancelDeleteHandler"></div>
 <!-- modal delete -->
 
 <div data-cy="modal-delete" class="jss24 jss5" v-if="!isDeleteData">
@@ -303,9 +307,23 @@ export default {
 </template>
 
 <style>
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Warna latar belakang overlay, termasuk tingkat transparansi */
+  z-index: 999; /* Z-index untuk memastikan overlay tampil di atas konten lain */
+  display: none; /* Awalnya sembunyi */
+  cursor: pointer; /* Ubah kursor mouse menjadi pointer saat mengarahkan ke overlay */
+}
 .hidden {
   display: none;
 }
+
+
 
 .input-h1-size {
   font-size: 2rem; 
