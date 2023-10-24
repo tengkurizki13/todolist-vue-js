@@ -270,13 +270,13 @@ export default {
             <div data-cy="modal-add-name-title" class="jss186">NAMA LIST ITEM</div>
             <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
             <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
-              <select class="form-select" data-cy="modal-add-priority-dropdown" aria-label="Default select example" v-model="priority">
-                <option value="very-high" data-cy="modal-add-priority-item">Very High</option>
-                <option value="high" data-cy="modal-add-priority-item">High</option>
-                <option value="normal" data-cy="modal-add-priority-item">Medium</option>
-                <option value="low" data-cy="modal-add-priority-item">Low</option>
-                <option value="very-low" data-cy="modal-add-priority-item">Very Low</option>
-              </select>
+            <select class="form-select" data-cy="modal-add-priority-dropdown" v-model="priority">
+                  <option value="very-high" data-cy="modal-add-priority-item">Very High</option>
+                  <option value="high" data-cy="modal-add-priority-item">High</option>
+                  <option value="normal" data-cy="modal-add-priority-item">Medium</option>
+                  <option value="low" data-cy="modal-add-priority-item">Low</option>
+                  <option value="very-low" data-cy="modal-add-priority-item">Very Low</option>
+                </select>
           </div>
         </div>
         <div class="modal-footer">
