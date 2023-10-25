@@ -84,9 +84,6 @@ export default {
       }
     },
     showElementSort(){
-      setTimeout(() => {
-        cy.get('[data-cy="todo-sort-button"]').click();
-      }, 1000); 
       this.isSort = !this.isSort
     },
     openEditHandler(id,title,priority){
@@ -136,9 +133,6 @@ export default {
     this.idTodo = id;
     },
     openAddModal() {
-      setTimeout(() => {
-        cy.get('[data-cy="todo-add-button"]').click();
-      }, 1000); 
       this.isEditing = false;
       this.empty = true
       this.title = "";
@@ -290,7 +284,7 @@ export default {
 
 
  <!-- modal -->
- <div class="modal fade" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
