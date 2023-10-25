@@ -24,6 +24,9 @@ export default {
       allTodo :[],
       empty:true,
       idActivity :0,
+      isdropdwonAdd : true,
+      backgroundSelect : "background: rgb(237, 76, 92);",
+      titleSelect : "very-high",
      
     }
   },
@@ -62,10 +65,44 @@ export default {
       this.getActivityDetail (id)
       this.getTodos (id)
     },
+    selectItem(item){
+      switch (item) {
+        case 'very-high':
+          this.titleSelect = item
+          this.backgroundSelect = 'background: rgb(237, 76, 92);'
+          this.showDropdown()
+        break;
+        case 'high':
+        this.titleSelect = item
+        this.backgroundSelect = 'background: rgb(255, 107, 38);'
+        this.showDropdown()
+        break;
+        case 'normal':
+        this.titleSelect = item
+        this.backgroundSelect = 'background: rgb(33, 109, 20);'
+        this.showDropdown()
+        break;
+        case 'low':
+        this.titleSelect = item
+        this.backgroundSelect = 'background: rgb(40, 109, 161);'
+        this.showDropdown()
+        break;
+        case 'very-low':
+        this.titleSelect = item
+        this.backgroundSelect = 'background: rgb(161, 44, 147);'
+        this.showDropdown()
+        break;
+      
+        default:
+          break;
+      }
+    },
     submitHandler(){
       if (this.isEditing) {
+        this.priority = this.titleSelect
         this.updateTodo (this.idTodo,this.activity.id,)
       }else{
+        this.priority = this.titleSelect
         this.addTodo (this.activity.id)
       }
     },
@@ -85,6 +122,9 @@ export default {
     },
     showElementSort(){
       this.isSort = !this.isSort
+    },
+    showDropdown(){
+      this.isdropdwonAdd = !this.isdropdwonAdd
     },
     openEditHandler(id,title,priority){
       this.openEditModal(id,title,priority);
@@ -129,14 +169,13 @@ export default {
     openEditModal(id,titleEdit,priorityEdit) {
     this.isEditing = true;
     this.title = titleEdit;
-    this.priority = priorityEdit;
+    this.titleSelect = priorityEdit;
     this.idTodo = id;
     },
     openAddModal() {
       this.isEditing = false;
       this.empty = true
       this.title = "";
-      this.priority = "very-high";
     },
     checkInput() {
       if (this.title === "") {
@@ -284,7 +323,7 @@ export default {
 
 
  <!-- modal -->
- <div class="modal" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <!-- <div class="modal" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -314,7 +353,79 @@ export default {
       </form>
     </div>
   </div>
+</div> -->
+
+
+<div class="modal" data-cy="modal-add" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form class="mt-8 space-y-6" @submit.prevent="submitHandler">
+      <div class="modal-body">
+        <div class="jss183"><div data-cy="modal-add-title" class="jss184">Tambah List Item</div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="modal-add-close-button"></svg>
+          </div>
+          <div class="jss185">
+            <div data-cy="modal-add-name-title" class="jss186">NAMA LIST ITEM</div>
+            <input class="jss189 jss187" data-cy="modal-add-name-input" placeholder="Tambahkan nama list item" v-model="title" @input="checkInput">
+            <div data-cy="modal-add-priority-title" class="jss186">PRIORITY</div>
+            <!-- selected-drowdown  -->
+            <div data-cy="modal-add-priority-dropdown" class="jss45" v-if="isdropdwonAdd" @click="showDropdown">
+              <div class="jss49"><div class="jss46" :style="backgroundSelect"></div>
+              <div class="jss51">{{ titleSelect }}</div>
+            </div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="#111111" stroke-linecap="square"></path></svg>
+          </div>
+          <!-- dropdownya -->
+            <div class="jss50" v-if="!isdropdwonAdd">
+              <div class="jss52" @click="showDropdown">
+                <div class="jss51"  >Pilih priority</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: matrix(1, 0, 0, -1, 0, 0);"><path d="M6 9L12 15L18 9" stroke="#111111" stroke-linecap="square"></path></svg>
+              </div>
+              <div data-cy="modal-add-priority-item" class="jss47 jss48"  @click="selectItem('very-high')">
+                <div class="jss49">
+                  <div class="jss46" style="background: rgb(237, 76, 92);"></div>
+                  <div class="jss51">Very High</div>
+                </div>
+              </div>
+              <div data-cy="modal-add-priority-item" class="jss47 jss48"  @click="selectItem('high')">
+                <div class="jss49">
+                  <div class="jss46" style="background: rgb(248, 165, 65);"></div>
+                  <div class="jss51">High</div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.75 9L7.5 12.75L15 5.25" stroke="#4A4A4A" stroke-linecap="square"></path></svg>
+              </div>
+              <div data-cy="modal-add-priority-item" class="jss47 jss48"  @click="selectItem('normal')">
+                <div class="jss49">
+                  <div class="jss46" style="background: rgb(0, 167, 144);"></div>
+                  <div class="jss51">Medium</div></div>
+                </div>
+                <div data-cy="modal-add-priority-item" class="jss47 jss48"  @click="selectItem('low')">
+                  <div class="jss49">
+                    <div class="jss46" style="background: rgb(66, 139, 193);"></div>
+                    <div class="jss51">Low</div>
+                  </div>
+                </div>
+                <div data-cy="modal-add-priority-item" class="jss47 jss48"  @click="selectItem('very-low')">
+                  <div class="jss49">
+                    <div class="jss46" style="background: rgb(137, 66, 193);"></div>
+                    <div class="jss51">Very Low</div>
+                  </div>
+                </div>
+                </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" data-cy="modal-add-save-button" :disabled="empty">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
+
+
 
 <div aria-hidden="true" style="z-index: 0; position: fixed; inset: 0px; background-color: rgba(0, 0, 0, 0.5); -webkit-tap-highlight-color: transparent;" v-if="!isDeleteData" @click="cancelDeleteHandler"></div>
 <!-- modal delete -->
@@ -353,6 +464,89 @@ export default {
 }
 
 
+
+.jss46 {
+    width: 14px;
+    height: 14px;
+    background: #16ABF8;
+    margin-right: 19px;
+    border-radius: 50%;
+}
+.jss47 {
+    display: flex;
+    padding: 14px 22px 14px 17px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.jss48 {
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.jss49 {
+    display: flex;
+    align-items: center;
+}
+
+.jss45 {
+    display: flex;
+    gap: 40px;
+}
+.jss50 {
+    top: 20;
+    width: 205px;
+    border: 1px solid #E5E5E5;
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 6px;
+}
+
+.jss51 {
+    color: #111111;
+    font-size: 16px;
+}
+
+.jss52 {
+    display: flex;
+    padding: 14px 17px;
+    background: #F4F4F4;
+    align-items: center;
+    border-bottom: 1px solid #E5E5E5;
+    justify-content: space-between;
+}
+
+.jss61 {
+    width: 205px;
+    position: relative;
+}
+
+.jss62 {
+    border: 1px solid #E5E5E5;
+    display: flex;
+    padding: 14px 17px;
+    background: #FFFFFF;
+    align-items: center;
+    border-radius: 6px;
+    justify-content: space-between;
+}
+
+.jss63 {
+    width: 14px;
+    height: 14px;
+    background: #16ABF8;
+    margin-right: 19px;
+    border-radius: 50%;
+}
+
+.jss66 {
+    display: flex;
+    align-items: center;
+}
+
+.jss68 {
+    color: #111111;
+    font-size: 16px;
+}
 
 .input-h1-size {
   font-size: 2rem; 
