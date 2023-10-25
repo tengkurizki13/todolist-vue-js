@@ -73,12 +73,14 @@ export default {
       this.updateTitle(this.activity.id, this.activity.title);
     },
     changeElement(action){
+      console.log(action,"ini action");
       if (action == 'input'){
         this.isUpdateTitle =true
       }else if (action == 'svg'){
         console.log(this.isUpdateTitle,"else if");
         this.isUpdateTitle = !this.isUpdateTitle
       }else{
+      console.log("else");
         this.isUpdateTitle =false
       }
     },
@@ -145,19 +147,12 @@ export default {
       }
     },
     changeElementOutInput(event) {
-      // if (!event.target.classList.contains('input-h1-size')) {
-      //   console.log("masuk");
-      //   this.changeElement()
-      // }else if (event.target.classList.contains('editSvg')) {
-      //   this.changeElement('svg')
-      // }else{
-      //   this.changeElement()
-      // }
-      // console.log(event.target.id == 'editSVG',"cek");
-       if (event.target.id == 'editSVG') {
+       if (event.target.classList.contains('editSVG')) {
         this.changeElement('svg')
         }else if (event.target.classList.contains('input-h1-size')) {
         
+        }else if (event.target.classList.contains('h1')) {
+          this.changeElement('input')
         }else{
           this.changeElement()
         }
@@ -212,9 +207,9 @@ export default {
         <div class="jss25 jss26 jss20">
           <div class="jss25">
             <svg width="32" @click="changePageHandler" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-back-button" class="jss23"><path d="M6.66675 16L14.6667 24" stroke="#111111" stroke-width="5" stroke-linecap="square"></path><path d="M6.66675 16L14.6667 8" stroke="#111111" stroke-width="5" stroke-linecap="square"></path></svg>
-            <h1 class="jss10" data-cy="todo-title" v-if="!isUpdateTitle" @click="changeElement('input')">{{ activity.title }}</h1>
+            <h1 class="jss10 h1" data-cy="todo-title" v-if="!isUpdateTitle">{{ activity.title }}</h1>
             <input type="text" class="form-control border-0  bg-transparent input-h1-size" v-model="activity.title" @change="handleInputChange" v-if="isUpdateTitle" />
-            <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-title-edit-button" class="jss23" id="editSVG"><path d="M4 19.9998H8L18.5 9.49981C19.0304 8.96938 19.3284 8.24996 19.3284 7.49981C19.3284 6.74967 19.0304 6.03025 18.5 5.49981C17.9696 4.96938 17.2501 4.67139 16.5 4.67139C15.7499 4.67139 15.0304 4.96938 14.5 5.49981L4 15.9998V19.9998Z" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 6.49982L17.5 10.4998" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-title-edit-button" class="jss23 editSVG"><path d="M4 19.9998H8L18.5 9.49981C19.0304 8.96938 19.3284 8.24996 19.3284 7.49981C19.3284 6.74967 19.0304 6.03025 18.5 5.49981C17.9696 4.96938 17.2501 4.67139 16.5 4.67139C15.7499 4.67139 15.0304 4.96938 14.5 5.49981L4 15.9998V19.9998Z" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13.5 6.49982L17.5 10.4998" stroke="#A4A4A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           </div>
 
           <!-- sort -->
