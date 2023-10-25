@@ -84,6 +84,7 @@ export default {
       }
     },
     showElementSort(){
+      cy.get('[data-cy="todo-sort-button"]').click({ force: true });
       this.isSort = !this.isSort
     },
     openEditHandler(id,title,priority){
@@ -133,6 +134,7 @@ export default {
     this.idTodo = id;
     },
     openAddModal() {
+      cy.get('[data-cy="todo-add-button"]').click({ force: true });
       this.isEditing = false;
       this.empty = true
       this.title = "";
@@ -249,13 +251,35 @@ export default {
                     </div>
                   </div>
             
-            <div class="jss25" >
-              <svg @click="showElementSort" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" data-cy="todo-sort-button" class="jss23" type="button"><path d="M18 24L22 20M22 20L26 24M22 20V34" stroke="#888888" stroke-width="1.5" stroke-linecap="square"></path><path d="M36 30L32 34M32 34L28 30M32 34V20" stroke="#888888" stroke-width="1.5" stroke-linecap="square"></path><rect x="0.5" y="0.5" width="53" height="53" rx="26.5" stroke="#E5E5E5"></rect></svg>
+                  <div class="jss25">
+                  <svg
+                    @click="showElementSort"
+                    width="54"
+                    height="54"
+                    viewBox="0 0 54 54"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-cy="todo-sort-button"
+                    class="jss23"
+                    type="button"
+                  >
+                    <!-- Isi elemen SVG -->
+                  </svg>
 
-              <button @click="openAddModal" class="jss11 jss12" data-cy="todo-add-button" data-bs-toggle="modal" data-bs-target="#exampleModal"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.99988V18.9999" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path><path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path></svg>
-                Tambah
-              </button>
-            </div>
+                  <button
+                    @click="openAddModal"
+                    class="jss11 jss12"
+                    data-cy="todo-add-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4.99988V18.9999" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                      <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"></path>
+                    </svg>
+                    Tambah
+                  </button>
+                </div>
           </div>
       
           <!-- item -->
